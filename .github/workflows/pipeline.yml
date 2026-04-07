@@ -1,0 +1,41 @@
+name: CI - Testes Automatizados
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  testes:
+    name: Rodar Testes com Pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar testes e gerar relatório
+        run: |
+          pytest --tb=short \
+                 --junitxml=relatorio-testes/results.xml \
+                 --html=relatorio-testes/report.html \
+                 --self-contained-html \
+                 -v
+
+      - name: Salvar relatório de testes como artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorio-testes
+          path: relatorio-testes/
