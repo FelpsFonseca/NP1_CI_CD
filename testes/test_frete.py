@@ -19,3 +19,7 @@ def test_frete_valor_exato_limite():
 def test_frete_subtotal_zero():
     f = Frete()
     assert f.calcular(0.0) == 15.0
+
+def test_frete_cobrado_quando_subtotal_abaixo_do_limite():
+    f = Frete()
+    assert f.calcular(180.0) == 15.0

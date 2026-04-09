@@ -19,3 +19,8 @@ def test_desconto_50_porcento():
 def test_desconto_percentual_guardado():
     d = Desconto(25)
     assert d.percentual == 25
+
+def test_desconto_20_porcento_em_valor_quebrado():
+    d = Desconto(20)
+    assert d.aplicar(150.0) == 120.0
+

@@ -25,3 +25,8 @@ def test_subtotal_preco_float():
     p = Produto("Lápis", 1.5)
     item = ItemCarrinho(p, 4)
     assert item.subtotal() == 6.0
+
+def test_item_carrinho_com_produto_caro():
+    p = Produto("Monitor", 900.0)
+    item = ItemCarrinho(p, 2)
+    assert item.subtotal() == 1800.0

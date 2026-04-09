@@ -20,3 +20,8 @@ def test_produto_preco_float():
 def test_produto_nome_com_espacos():
     p = Produto("HD Externo", 300.0)
     assert p.nome == "HD Externo"
+
+def test_produto_com_nome_e_preco_diferentes():
+    p = Produto("Cadeira Gamer", 1200.0)
+    assert p.nome == "Cadeira Gamer"
+    assert p.preco == 1200.0

@@ -34,3 +34,11 @@ def test_atualizar_status_pedido():
     p = Pedido(c, "Julia")
     p.atualizar_status("entregue")
     assert p.status == "entregue"
+
+def test_atualizar_status_para_confirmado():
+    c = Carrinho()
+    c.adicionar_item(Produto("Livro", 30.0))
+    p = Pedido(c, "Felipe")
+    p.atualizar_status("confirmado")
+    assert p.status == "confirmado"
+
