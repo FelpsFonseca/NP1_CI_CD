@@ -4,6 +4,7 @@ from src.carrinho_compras.desconto import Desconto
 from src.carrinho_compras.frete import Frete
 from src.carrinho_compras.pedido import Pedido
 from flask import Flask
+import os
 
 app = Flask(__name__)
 
