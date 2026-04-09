@@ -12,7 +12,8 @@ def home():
     return "Aplicação CI/CD rodando com sucesso!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
     p1 = Produto("Notebook", 2500.00)
     p2 = Produto("Mouse", 80.00)
 
