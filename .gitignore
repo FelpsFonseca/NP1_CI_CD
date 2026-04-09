@@ -1,1 +1,19 @@
 .idea/
+
+# Ambiente virtual
+venv/
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# Arquivos de teste
+*.xml
+*.html
+relatorio-testes/
+
+# IntelliJ
+.idea/
+
+# Sistema
+.DS_Store

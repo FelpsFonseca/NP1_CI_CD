@@ -30,6 +30,8 @@ class Carrinho:
             valor = desconto.aplicar(valor)
         if frete:
             valor += frete.calcular(self.subtotal())
+        if not self.itens:
+            return 0
         return valor
 
     def limpar(self):

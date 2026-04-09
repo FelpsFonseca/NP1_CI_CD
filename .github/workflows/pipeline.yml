@@ -1,4 +1,4 @@
-name: CI - Testes Automatizados
+name: CI/CD Pipeline
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - master
 
 jobs:
+
   testes:
     name: Rodar Testes com Pytest
     runs-on: ubuntu-latest
@@ -25,6 +26,9 @@ jobs:
       - name: Instalar dependências
         run: pip install -r requirements.txt
 
+      - name: Criar pasta de relatório
+        run: mkdir -p relatorio-testes
+
       - name: Rodar testes e gerar relatório
         run: |
           pytest --tb=short \
@@ -39,3 +43,52 @@ jobs:
         with:
           name: relatorio-testes
           path: relatorio-testes/
+
+  build:
+    name: Build do Projeto
+    needs: testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Criar pacote do projeto
+        run: zip -r projeto.zip .
+
+      - name: Salvar build como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: projeto.zip
+
+  deploy:
+    name: Deploy da Aplicação
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via webhook (Render/Railway)
+        run: curl -X POST ${{ secrets.DEPLOY_HOOK }} -f
+
+  notificacao:
+    name: Notificação Final
+    needs: [testes, build, deploy]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Executar script de notificação
+        run: python scripts/enviar_notificacao.py
+        env:
+          STATUS: ${{ needs.deploy.result }}
