@@ -1,57 +1,57 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline  # Nome da pipeline exibido no GitHub Actions
 
 on:
-  push:
+  push:  # Dispara a pipeline quando houver push
     branches:
-      - master
+      - master  # Apenas na branch master
   pull_request:
     branches:
-      - master
+      - master  # Dispara também em PRs para a master
 
 jobs:
 
   testes:
-    name: Rodar Testes com Pytest
-    runs-on: ubuntu-latest
+    name: Rodar Testes com Pytest  # Nome do job de testes
+    runs-on: ubuntu-latest  # Ambiente onde o job será executado
 
     steps:
       - name: Checkout do repositório
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Baixa o código do repositório
 
       - name: Configurar Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5  # Define a versão do Python
         with:
           python-version: '3.11'
 
       - name: Instalar dependências
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt  # Instala dependências do projeto
 
       - name: Criar pasta de relatório
-        run: mkdir -p relatorio-testes
+        run: mkdir -p relatorio-testes  # Cria pasta para armazenar relatórios
 
       - name: Rodar testes e gerar relatório
         run: |
-          pytest --tb=short \
-                 --junitxml=relatorio-testes/results.xml \
-                 --html=relatorio-testes/report.html \
-                 --self-contained-html \
-                 -v
+          pytest --tb=short \  # Executa testes com saída resumida
+                 --junitxml=relatorio-testes/results.xml \  # Gera relatório XML
+                 --html=relatorio-testes/report.html \  # Gera relatório HTML
+                 --self-contained-html \  # HTML completo (sem dependências externas)
+                 -v  # Modo verboso (detalhado)
 
       - name: Salvar relatório de testes como artifact
-        uses: actions/upload-artifact@v4
-        if: always()
+        uses: actions/upload-artifact@v4  # Salva arquivos gerados
+        if: always()  # Executa mesmo que os testes falhem
         with:
-          name: relatorio-testes
-          path: relatorio-testes/
+          name: relatorio-testes  # Nome do artifact
+          path: relatorio-testes/  # Caminho dos arquivos
 
   build:
-    name: Build do Pacote
+    name: Build do Pacote  # Job responsável por gerar o pacote
     runs-on: ubuntu-latest
-    needs: testes
+    needs: testes  # Só executa se o job de testes terminar
 
     steps:
       - name: Checkout do repositório
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Baixa o código novamente
 
       - name: Configurar Python 3.11
         uses: actions/setup-python@v5
@@ -59,34 +59,34 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependências de build
-        run: pip install -r requirements-dev.txt
+        run: pip install -r requirements-dev.txt  # Instala dependências de build
 
       - name: Gerar pacote distribuível
-        run: python -m build
+        run: python -m build  # Gera arquivos do pacote (dist/)
 
       - name: Salvar pacote como artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4  # Salva o pacote gerado
         with:
-          name: pacote-distribuivel
-          path: dist/
+          name: pacote-distribuivel  # Nome do artifact
+          path: dist/  # Diretório com os arquivos do build
 
   deploy:
-    name: Deploy da Aplicação
-    needs: build
+    name: Deploy da Aplicação  # Job de deploy
+    needs: build  # Só executa após o build
     runs-on: ubuntu-latest
 
     steps:
       - name: Deploy via webhook (Render/Railway)
-        run: curl -X POST ${{ secrets.DEPLOY_HOOK }} -f
+        run: curl -X POST ${{ secrets.DEPLOY_HOOK }} -f  # Dispara deploy via webhook seguro
 
   notificacao:
-    name: Notificação Final
-    needs: [testes, build, deploy]
+    name: Notificação Final  # Job final para notificação
+    needs: [testes, build, deploy]  # Executa após todos os jobs anteriores
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Baixa o código
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -94,9 +94,9 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependências
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt  # Instala dependências necessárias
 
       - name: Executar script de notificação
-        run: python scripts/enviar_notificacao.py
+        run: python scripts/enviar_notificacao.py  # Executa script de notificação
         env:
-          STATUS: ${{ needs.deploy.result }}
+          STATUS: ${{ needs.deploy.result }}  # Passa o status do deploy para o script
