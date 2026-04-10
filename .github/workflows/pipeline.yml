@@ -11,38 +11,40 @@ on:
 jobs:
 
   testes:
-    name: Rodar Testes com Pytest  # Nome do job de testes
-    runs-on: ubuntu-latest  # Ambiente onde o job será executado
+    name: Rodar Testes com Pytest # Nome do job de testes
+    runs-on: ubuntu-latest # Ambiente onde o job será executado
 
     steps:
       - name: Checkout do repositório
-        uses: actions/checkout@v4  # Baixa o código do repositório
+        uses: actions/checkout@v4 # Baixa o código do repositório
 
       - name: Configurar Python 3.11
-        uses: actions/setup-python@v5  # Define a versão do Python
+        uses: actions/setup-python@v5 # Define a versão do Python
         with:
           python-version: '3.11'
 
       - name: Instalar dependências
-        run: pip install -r requirements.txt  # Instala dependências do projeto
+        run: |
+          pip install -r requirements.txt 
+          pip install -e .
 
       - name: Criar pasta de relatório
-        run: mkdir -p relatorio-testes  # Cria pasta para armazenar relatórios
+        run: mkdir -p relatorio-testes # Cria pasta para armazenar relatórios
 
       - name: Rodar testes e gerar relatório
-        run: | 
-          pytest --tb=short \  
-                 --junitxml=relatorio-testes/results.xml \  
-                 --html=relatorio-testes/report.html \  
-                 --self-contained-html \  
-                 -v 
+        run: |
+          pytest --tb=short \
+            --junitxml=relatorio-testes/results.xml \
+            --html=relatorio-testes/report.html \
+            --self-contained-html \
+            -v
 
       - name: Salvar relatório de testes como artifact
-        uses: actions/upload-artifact@v4  # Salva arquivos gerados
-        if: always()  # Executa mesmo que os testes falhem
+        uses: actions/upload-artifact@v4 # Salva arquivos gerados
+        if: always() # Executa mesmo que os testes falhem
         with:
-          name: relatorio-testes  # Nome do artifact
-          path: relatorio-testes/  # Caminho dos arquivos
+          name: relatorio-testes # Nome do artifact
+          path: relatorio-testes/ # Caminho dos arquivos
 
   build:
     name: Build do Pacote  # Job responsável por gerar o pacote
