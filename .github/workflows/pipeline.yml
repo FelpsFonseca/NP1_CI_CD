@@ -30,12 +30,12 @@ jobs:
         run: mkdir -p relatorio-testes  # Cria pasta para armazenar relatórios
 
       - name: Rodar testes e gerar relatório
-        run: |
-          pytest --tb=short \  # Executa testes com saída resumida
-                 --junitxml=relatorio-testes/results.xml \  # Gera relatório XML
-                 --html=relatorio-testes/report.html \  # Gera relatório HTML
-                 --self-contained-html \  # HTML completo (sem dependências externas)
-                 -v  # Modo verboso (detalhado)
+        run: | 
+          pytest --tb=short \  
+                 --junitxml=relatorio-testes/results.xml \  
+                 --html=relatorio-testes/report.html \  
+                 --self-contained-html \  
+                 -v 
 
       - name: Salvar relatório de testes como artifact
         uses: actions/upload-artifact@v4  # Salva arquivos gerados
