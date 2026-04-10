@@ -1,19 +1,36 @@
-.idea/
-
-# Ambiente virtual
-venv/
-
-# Cache Python
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
 
-# Arquivos de teste
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testes e relatórios
+.pytest_cache/
+htmlcov/
+*.cover
+.coverage
+report.html
 *.xml
-*.html
 relatorio-testes/
 
-# IntelliJ
-.idea/
-
-# Sistema
+# OS
 .DS_Store
+Thumbs.db
+
+# Env
+.env

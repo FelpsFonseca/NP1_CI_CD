@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=75.0.0", "wheel>=0.45.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "carrinho-compras"
+version = "1.0.0"
+description = "Sistema de carrinho de compras - NP1 CI/CD"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
