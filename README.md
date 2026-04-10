@@ -264,3 +264,69 @@ dist/
 
 Desenvolvido por **Ana Júlia Pinto, Felipe Fonseca Vidal Prado, Pettrius Vilas Boas de Paiva Cardoso, Vinicius Pereira Cardoso dos Santos**  
 🎓 Projeto acadêmico de **CI/CD**
+
+## ☁️ Deploy Automatizado (Render)
+
+A aplicação está configurada para deploy automático utilizando a plataforma Render.
+
+### 🔗 Funcionamento
+
+* O deploy é acionado automaticamente via *Deploy Hook*
+* A chamada é feita a partir da pipeline do GitHub Actions
+* O deploy só ocorre se todas as etapas anteriores forem concluídas com sucesso
+
+### ⚙️ Configuração no Render
+
+* Tipo de serviço: Web Service
+* Ambiente: Python
+* Build Command:
+
+
+pip install -r requirements.txt
+
+
+* Start Command:
+
+
+python main.py
+
+
+### ⚠️ Porta dinâmica
+
+Para funcionar corretamente no Render, a aplicação utiliza a porta definida pelo ambiente:
+
+python
+port = int(os.environ.get("PORT", 10000))
+
+
+Isso garante compatibilidade com o ambiente de execução da plataforma.
+
+---
+
+## 🔄 Integração com GitHub Actions
+
+O deploy é integrado à pipeline através de uma requisição HTTP:
+
+yaml
+- name: Deploy via webhook
+  run: curl -X POST ${{ secrets.DEPLOY_HOOK }}
+
+
+A URL do webhook é armazenada como *Secret* no GitHub, garantindo segurança e evitando exposição de dados sensíveis.
+
+---
+
+## 📢 Notificação do Pipeline
+
+A etapa final da pipeline executa um script Python responsável por informar o status da execução.
+
+* Utiliza variável de ambiente STATUS
+* Não utiliza dados hardcoded
+* Resultado exibido nos logs do GitHub Actions
+
+Exemplo de saída:
+
+
+NOTIFICAÇÃO DO PIPELINE
+Status final: success
+Pipeline executado com sucesso!
