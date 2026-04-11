@@ -332,38 +332,6 @@ Pipeline executado com sucesso!
 
 A IA foi utilizada como apoio nas tarefas de build, gerenciamento de dependências, .gitignore e testes de extensão.
 
-**Prompt 1 — Configuração de dependências e build**
-> "Configure o `requirements.txt` e `requirements-dev.txt` para o projeto. Crie o `pyproject.toml` necessário para o build funcionar com `python -m build`."
-
-Resultado satisfatório. Os arquivos foram gerados com alguns erros que foi resolvido manualmente, o build foi testado localmente e gerou os pacotes `.tar.gz` e `.whl` sem erros.
-
----
-
-**Prompt 2 — Job de build no pipeline**
-> "Adicione o job de build no `pipeline.yml` existente. O job deve instalar dependências via `requirements-dev.txt`, rodar `python -m build` e salvar o pacote como artifact. Deve executar somente após o sucesso dos testes."
-
-Resultado satisfatório. O job foi criado com `needs: testes` e os steps de instalação, build e upload de artifact.
-
----
-
-**Prompt 3 — Testes de fluxo de extensão (erro)**
-> "Crie 5 testes unitários de fluxo de extensão (erro) que não repitam os testes do outro integrante. Cada teste deve cobrir uma classe diferente do projeto e validar exceções com `pytest.raises`."
-
-Resultado satisfatório. Os 5 testes foram gerados, houve alguns problemas de validação, de forma que correões manuais foram validados localmente - (5/5 passed) e cobrem: `Produto`, `ItemCarrinho`, `Frete`, `Desconto` e `Pedido`.
-
----
-
-**Prompt 4 — Resolução de conflitos no merge**
-> "Resolva os conflitos do rebase entre meu código e o do colega nos arquivos `pipeline.yml`, `.gitignore` e `requirements.txt`, mantendo as alterações de ambos."
-
-Resultado satisfatório. Houve alguns problemas de conflitos de merge, que causavam erros na hora de subir as features e o Claude criou ótimas instruções que resolveram os conflitos, preservando os jobs dos colegas (deploy, notificação) e integrando o job de build e as demais configurações.
-
-## Uso de IA (Claude – Anthropic)
-
-### Pettrius Vilas Boas De Paiva Cardoso
-
-A IA foi utilizada como apoio nas tarefas de build, gerenciamento de dependências, .gitignore e testes de extensão.
-
 *Prompt 1 — Configuração de dependências e build*
 > "Configure o requirements.txt e requirements-dev.txt para o projeto. Crie o pyproject.toml necessário para o build funcionar com python -m build."
 
@@ -392,9 +360,9 @@ Resultado satisfatório. Houve alguns problemas de conflitos de merge, que causa
 
 ## Uso de IA (ChatGPT – OpenAI)
 
-Felipe Fonseca
+### Felipe Fonseca Vidal Prado
 
-A IA foi utilizada como apoio na documentação do projeto, estruturação do README, configuração da pipeline CI/CD e correção de erros no GitHub Actions.
+A IA foi utilizada como apoio na documentação do projeto, estruturação do README.
 
 ---
 
@@ -407,6 +375,143 @@ Foi gerado um README completo com estrutura profissional, incluindo descrição 
 
 ---
 
+## Uso de IA (ChatGPT – OpenAI)
+
+### Vinicius Pereira Cardoso dos Santos
+
+A IA foi utilizada como apoio no desenvolvimento da etapa de **Deploy e Notificação**, incluindo configuração da pipeline CI/CD, integração com Render, resolução de erros e ajustes na aplicação.
+
+---
+
+### Prompt 1 — Entendimento do projeto
+
+"Tenho um projeto em python para entregar… (descrição das tarefas por integrante)"
+
+**Resultado satisfatório.**  
+Foi possível estruturar o contexto do projeto e definir claramente a responsabilidade na etapa de Deploy e Notificação.
+
+---
+
+### Prompt 2 — Construção da Pipeline CI/CD
+
+"Conteúdo do meu arquivo pipeline.yml é o seguinte…"  
+"Como ficaria meu pipeline dessa forma?"  
+"Ja adicionei o deploy_hook no github… o que falta?"
+
+**Resultado satisfatório.**  
+A pipeline foi construída corretamente, contemplando todas as etapas necessárias:
+- testes  
+- build  
+- deploy  
+- notificação  
+
+---
+
+### Prompt 3 — Configuração de Secrets e Variáveis
+
+"Dentro de Actions, clico em new repository secret ou variable?"  
+"O que seria URL do Render? Email tenho que colocar um válido?"  
+"Como faço para configurar essa variável de ambiente?"
+
+**Resultado satisfatório.**  
+Foi implementado o uso adequado de variáveis seguras:
+- uso de `secrets` (DEPLOY_HOOK)  
+- uso de variáveis de ambiente (`STATUS`)  
+- eliminação de dados hardcoded  
+
+---
+
+### Prompt 4 — Deploy com Render
+
+"Ja configurei o Render… o que faço agora?"  
+"Como faço para testar minha parte do projeto?"  
+"Deu erro no Render: Application exited early…"
+
+**Resultado satisfatório.**  
+Foi possível configurar corretamente o deploy:
+- definição do tipo de serviço  
+- adaptação da aplicação para Flask  
+- deploy automatizado via webhook  
+
+---
+
+### Prompt 5 — Ajustes na aplicação
+
+"O que devo mudar no projeto?"  
+"No open ports detected…"
+
+**Resultado satisfatório.**  
+Foram realizados ajustes fundamentais:
+- criação de aplicação Flask  
+- definição de rota web  
+- uso de porta dinâmica (`PORT`)  
+
+---
+
+### Prompt 6 — Execução e correção de testes
+
+"Criei o arquivo test_casos_importunos.py… erros de import"  
+"Erro no pytest (2 falhas)"
+
+**Resultado satisfatório.**  
+Foi garantida a execução correta dos testes:
+- correção de imports  
+- validação de casos impróprios  
+- estabilização da execução com Pytest  
+
+---
+
+### Prompt 7 — Configuração do ambiente Python
+
+"Como configuro ambiente virtual?"  
+"Erro externally-managed-environment"  
+"Erro ao criar venv (ensurepip)"
+
+**Resultado satisfatório.**  
+Foi configurado corretamente o ambiente:
+- criação de ambiente virtual (venv)  
+- instalação das dependências  
+- resolução de erros de ambiente  
+
+---
+
+### Prompt 8 — Git e autenticação
+
+"git push pedindo username e password"  
+"Invalid username or token"  
+"Erro: precisa de workflow scope"
+
+**Resultado satisfatório.**  
+Foi realizada a configuração correta de autenticação:
+- criação de token de acesso  
+- ajuste de permissões (`repo` e `workflow`)  
+
+---
+
+### Prompt 9 — Notificação do pipeline
+
+"Erro no enviar_notificacao.py (SMTP / NoneType)"  
+"Como configurar variável de ambiente?"
+
+**Resultado satisfatório.**  
+Foram corrigidos problemas críticos:
+- remoção de dependência de e-mail real  
+- uso de variáveis de ambiente  
+- funcionamento correto do script de notificação  
+
+---
+
+### Prompt 10 — Validação final do sistema
+
+"Render está rodando mas…"  
+"Timed out / No open ports detected"
+
+**Resultado satisfatório.**  
+O sistema foi finalizado com sucesso:
+- pipeline funcionando completamente  
+- deploy validado e operacional  
+
+---
 ## 👨‍💻 Autores
 
 Desenvolvido por **Ana Júlia Pinto, Felipe Fonseca Vidal Prado, Pettrius Vilas Boas de Paiva Cardoso, Vinicius Pereira Cardoso dos Santos**  
