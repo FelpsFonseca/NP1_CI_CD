@@ -260,10 +260,6 @@ dist/
 - 📦 `.whl` (wheel) — instalação rápida do pacote  
 - 📦 `.tar.gz` — distribuição do código fonte  
 
-## 👨‍💻 Autores
-
-Desenvolvido por **Ana Júlia Pinto, Felipe Fonseca Vidal Prado, Pettrius Vilas Boas de Paiva Cardoso, Vinicius Pereira Cardoso dos Santos**  
-🎓 Projeto acadêmico de **CI/CD**
 
 ## ☁️ Deploy Automatizado (Render)
 
@@ -326,7 +322,93 @@ A etapa final da pipeline executa um script Python responsável por informar o s
 
 Exemplo de saída:
 
-
 NOTIFICAÇÃO DO PIPELINE
 Status final: success
 Pipeline executado com sucesso!
+
+## Uso de IA (Claude – Anthropic)
+
+### Pettrius Vilas Boas De Paiva Cardoso
+
+A IA foi utilizada como apoio nas tarefas de build, gerenciamento de dependências, .gitignore e testes de extensão.
+
+**Prompt 1 — Configuração de dependências e build**
+> "Configure o `requirements.txt` e `requirements-dev.txt` para o projeto. Crie o `pyproject.toml` necessário para o build funcionar com `python -m build`."
+
+Resultado satisfatório. Os arquivos foram gerados com alguns erros que foi resolvido manualmente, o build foi testado localmente e gerou os pacotes `.tar.gz` e `.whl` sem erros.
+
+---
+
+**Prompt 2 — Job de build no pipeline**
+> "Adicione o job de build no `pipeline.yml` existente. O job deve instalar dependências via `requirements-dev.txt`, rodar `python -m build` e salvar o pacote como artifact. Deve executar somente após o sucesso dos testes."
+
+Resultado satisfatório. O job foi criado com `needs: testes` e os steps de instalação, build e upload de artifact.
+
+---
+
+**Prompt 3 — Testes de fluxo de extensão (erro)**
+> "Crie 5 testes unitários de fluxo de extensão (erro) que não repitam os testes do outro integrante. Cada teste deve cobrir uma classe diferente do projeto e validar exceções com `pytest.raises`."
+
+Resultado satisfatório. Os 5 testes foram gerados, houve alguns problemas de validação, de forma que correões manuais foram validados localmente - (5/5 passed) e cobrem: `Produto`, `ItemCarrinho`, `Frete`, `Desconto` e `Pedido`.
+
+---
+
+**Prompt 4 — Resolução de conflitos no merge**
+> "Resolva os conflitos do rebase entre meu código e o do colega nos arquivos `pipeline.yml`, `.gitignore` e `requirements.txt`, mantendo as alterações de ambos."
+
+Resultado satisfatório. Houve alguns problemas de conflitos de merge, que causavam erros na hora de subir as features e o Claude criou ótimas instruções que resolveram os conflitos, preservando os jobs dos colegas (deploy, notificação) e integrando o job de build e as demais configurações.
+
+## Uso de IA (Claude – Anthropic)
+
+### Pettrius Vilas Boas De Paiva Cardoso
+
+A IA foi utilizada como apoio nas tarefas de build, gerenciamento de dependências, .gitignore e testes de extensão.
+
+*Prompt 1 — Configuração de dependências e build*
+> "Configure o requirements.txt e requirements-dev.txt para o projeto. Crie o pyproject.toml necessário para o build funcionar com python -m build."
+
+Resultado satisfatório. Os arquivos foram gerados com alguns erros que foi resolvido manualmente, o build foi testado localmente e gerou os pacotes .tar.gz e .whl sem erros.
+
+---
+
+*Prompt 2 — Job de build no pipeline*
+> "Adicione o job de build no pipeline.yml existente. O job deve instalar dependências via requirements-dev.txt, rodar python -m build e salvar o pacote como artifact. Deve executar somente após o sucesso dos testes."
+
+Resultado satisfatório. O job foi criado com needs: testes e os steps de instalação, build e upload de artifact.
+
+---
+
+*Prompt 3 — Testes de fluxo de extensão (erro)*
+> "Crie 5 testes unitários de fluxo de extensão (erro) que não repitam os testes do outro integrante. Cada teste deve cobrir uma classe diferente do projeto e validar exceções com pytest.raises."
+
+Resultado satisfatório. Os 5 testes foram gerados, houve alguns problemas de validação, de forma que correões manuais foram validados localmente - (5/5 passed) e cobrem: Produto, ItemCarrinho, Frete, Desconto e Pedido.
+
+---
+
+*Prompt 4 — Resolução de conflitos no merge*
+> "Resolva os conflitos do rebase entre meu código e o do colega nos arquivos pipeline.yml, .gitignore e requirements.txt, mantendo as alterações de ambos."
+
+Resultado satisfatório. Houve alguns problemas de conflitos de merge, que causavam erros na hora de subir as features e o Claude criou ótimas instruções que resolveram os conflitos, preservando os jobs dos colegas (deploy, notificação) e integrando o job de build e as demais configurações.
+
+## Uso de IA (ChatGPT – OpenAI)
+
+Felipe Fonseca
+
+A IA foi utilizada como apoio na documentação do projeto, estruturação do README, configuração da pipeline CI/CD e correção de erros no GitHub Actions.
+
+---
+
+### Prompt 1 — Criação do README do projeto
+
+"Analise o repositório e crie um README com as principais informações do projeto."
+
+**Resultado satisfatório.**  
+Foi gerado um README completo com estrutura profissional, incluindo descrição do projeto, funcionalidades, estrutura de pastas e instruções de execução. Pequenos ajustes de formatação foram feitos manualmente.
+
+---
+
+## 👨‍💻 Autores
+
+Desenvolvido por **Ana Júlia Pinto, Felipe Fonseca Vidal Prado, Pettrius Vilas Boas de Paiva Cardoso, Vinicius Pereira Cardoso dos Santos**  
+🎓 Projeto acadêmico de **CI/CD**
+
